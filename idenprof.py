@@ -225,7 +225,8 @@ def train_network():
 # ----------------- The Section Responsible for Inference ---------------------
 CLASS_INDEX = None
 
-MODEL_PATH = os.path.join(execution_path, "idenprof_061-0.7933.h5")
+MODEL_FILE = "idenprof_061-0.7933.h5"
+MODEL_PATH = os.path.join(execution_path, MODEL_FILE)
 JSON_PATH = os.path.join(execution_path, "idenprof_model_class.json")
 
 
@@ -254,6 +255,12 @@ def decode_predictions(preds, top=5, model_json=""):
 
 def run_inference():
     model = ResNet50(input_shape=(224, 224, 3), num_classes=10)
+    if not os.path.exists(MODEL_PATH):
+        model_url = f"https://github.com/OlafenwaMoses/IdenProf/releases/download/v1.0/{MODEL_FILE}"
+        response = requests.get(model_url)
+        with open(MODEL_FILE, 'wb') as f:
+            f.write(response.content)
+
     model.load_weights(MODEL_PATH)
 
     picture = os.path.join(execution_path, "test-images/1.jpg")

@@ -256,14 +256,14 @@ def run_inference():
     model = ResNet50(input_shape=(224, 224, 3), num_classes=10)
     model.load_weights(MODEL_PATH)
 
-    picture = os.path.join(execution_path, "Haitian-fireman.jpg")
+    picture = os.path.join(execution_path, "test-images/1.jpg")
 
     image_to_predict = image.load_img(picture, target_size=(
-        224, 224))
-    image_to_predict = image.img_to_array(image_to_predict, data_format="channels_last")
-    image_to_predict = np.expand_dims(image_to_predict, axis=0)
+        224, 224))  # image.load_img <class 'PIL.Image.Image'>
+    image_to_predict = image.img_to_array(image_to_predict, data_format="channels_last")  # (224, 224, 3)
+    image_to_predict = np.expand_dims(image_to_predict, axis=0)  # (1, 224, 224, 3)
 
-    image_to_predict = preprocess_input(image_to_predict)
+    image_to_predict = preprocess_input(image_to_predict)  # (1, 224, 224, 3)
 
     prediction = model.predict(x=image_to_predict, steps=1)
 
@@ -273,6 +273,5 @@ def run_inference():
         print(str(result[0]), " : ", str(result[1] * 100))
 
 
-# run_inference()
-train_network()
-
+run_inference()
+# train_network()
